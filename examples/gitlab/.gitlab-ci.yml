@@ -1,6 +1,12 @@
 stages:
   - root
 
+variables:
+ GIT_SUBMODULE_STRATEGY: recursive
+ # Fixes: Ansible is being run in a world writable directory, see:
+ # https://github.com/stackhpc/kayobe-automation/issues/2
+ FF_DISABLE_UMASK_FOR_DOCKER_EXECUTOR: "true"
+
 default:
   image: centos:8
 
@@ -8,37 +14,35 @@ everything:
   stage: root
   when: manual
   script:
-    - .automation/cd/apply.sh
+    - .automation/pipeline/apply.sh
 
 project:
   stage: root
   when: manual
   script:
-    - .automation/cd/apply.sh -p ansible/um6p-project.yml
+    - .automation/pipeline/apply.sh -p ansible/um6p-project.yml
 
 images:
   stage: root
   when: manual
   script:
-    - .automation/cd/apply.sh -p ansible/um6p-images.yml
+    - .automation/pipeline/apply.sh -p ansible/um6p-images.yml
 
 networks:
   stage: root
   when: manual
   script:
-    - .automation/cd/apply.sh -p -p ansible/um6p-networks.yml
+    - .automation/pipeline/apply.sh -p -p ansible/um6p-networks.yml
 
 flavors:
   stage: root
   when: manual
   script:
-    - .automation/cd/apply.sh -p ansible/um6p-flavors.yml
+    - .automation/pipeline/apply.sh -p ansible/um6p-flavors.yml
 
 host-aggregrates:
   stage: root
   when: manual
   script:
-    - .automation/cd/apply.sh -p ansible/um6p-host-aggregates.yml
-
-
+    - .automation/pipeline/apply.sh -p ansible/um6p-host-aggregates.yml
 
