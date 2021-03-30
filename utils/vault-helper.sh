@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo "$OPENSTACK_CONFIG_VAULT_PASSWORD"

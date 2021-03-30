@@ -1,0 +1,20 @@
+---
+# Include this file to use environment variables for openstack auth instead
+# of the ansible dictionary where the defaults only work for password auth
+# and not app creds.
+
+# Configuration of OpenStack authentication variables.
+
+# Cloud authentication type. This should be a string compatible with the
+# 'auth_type' argument of most 'os_*' Ansible modules.
+openstack_auth_type: "v3applicationcredential"
+
+# Cloud authentication parameters. This should be a dict providing items
+# compatible with the 'auth' argument of most 'os_*' Ansible modules.
+# By default we pull these from the environment of the shell executing Ansible.
+openstack_auth:
+  application_credential_id: "{{ lookup('env', 'OS_APPLICATION_CREDENTIAL_ID') }}"
+  application_credential_secret: "{{ lookup('env', 'OS_APPLICATION_CREDENTIAL_SECRET') }}"
+  # Might have to conditionally add the v3
+  auth_url: "{{ lookup('env', 'OS_AUTH_URL') }}/v3"
+

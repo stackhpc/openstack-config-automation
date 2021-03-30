@@ -1,0 +1,1 @@
+export OPENSTACK_CONFIG_PREFIX=um6p
