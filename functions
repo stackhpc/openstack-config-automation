@@ -6,7 +6,49 @@ set -o pipefail
 # Library of functions for the kayobe development environment.
 
 PARENT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT=$PARENT/..
+export OPENSTACK_CONFIG_REPO_ROOT="$FUNCTIONS_PARENT/.."
+export OPENSTACK_CONFIG_AUTOMATION_CONFIG_PATH="${LIB_AUTOMATION_CONFIG_PATH:-$LIB_AUTOMATION_REPO_ROOT/.automation.conf}"
+
+# Configuration
+
+function config_defaults {
+    # Set default values for kayobe development configuration.
+
+    export OPENSTACK_CONFIG_VENV_PATH="${OPENSTACK_CONFIG_VENV_PATH:-$HOME/venvs/openstack-config}"
+    export OPENSTACK_CONFIG_PIP_INSTALL_ARGS="${OPENSTACK_CONFIG_PIP_INSTALL_ARGS:--r $REPO_ROOT/requirements.txt}"
+    export OPENSTACK_CONFIG_ANSIBLE_EXTRA_ARGS="${OPENSTACK_CONFIG_ANSIBLE_EXTRA_ARGS:-}"
+
+    # Log directory in case of errors
+    export LOGDIR=${LOGDIR:-}
+
+    # Ansible defaults
+    export ANSIBLE_FORCE_COLOR=${ANSIBLE_FORCE_COLOR:-True}
+}
+
+function config_set {
+    # Source the configuration file, config.sh
+
+    if [ -f "${OPENSTACK_CONFIG_AUTOMATION_CONFIG_PATH}/config.sh" ]; then
+        source "${OPENSTACK_CONFIG_AUTOMATION_CONFIG_PATH}/config.sh"
+    fi
+}
+
+function config_check {
+    # Check the configuration environment variables.
+    if [[ -z "${OPENSTACK_CONFIG_PREFIX:+x}" ]]; then
+        die $LINENO "OPENSTACK_CONFIG_PREFIX must be set. This is the prefix to all playbooks. e.g p3"
+    fi
+    if [ -z ${OPENSTACK_CONFIG_OPENRC:+x} ]; then
+        die $LINENO "You must define OPENSTACK_CONFIG_OPENRC. This should contain the contents of"
+                    "OpenStack clouds.yaml file"
+    fi
+}
+
+function config_init {
+    config_set
+    config_defaults
+    config_check
+}
 
 # Utility functions
 
@@ -71,48 +113,6 @@ function pause(){
    read -p "$*"
 }
 
-# Configuration
-
-function config_defaults {
-    # Set default values for kayobe development configuration.
-
-    export OPENSTACK_CONFIG_VENV_PATH="${OPENSTACK_CONFIG_VENV_PATH:-$HOME/venvs/openstack-config}"
-    export OPENSTACK_CONFIG_PIP_INSTALL_ARGS="${OPENSTACK_CONFIG_PIP_INSTALL_ARGS:--r $REPO_ROOT/requirements.txt}"
-    export OPENSTACK_CONFIG_ANSIBLE_EXTRA_ARGS="${OPENSTACK_CONFIG_ANSIBLE_EXTRA_ARGS:-}"
-
-    # Log directory in case of errors
-    export LOGDIR=${LOGDIR:-}
-
-    # Ansible defaults
-    export ANSIBLE_FORCE_COLOR=${ANSIBLE_FORCE_COLOR:-True}
-}
-
-function config_set {
-    # Source the configuration file, config.sh
-
-    PARENT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-    if [ -f "${PARENT}/config.sh" ]; then
-        source "${PARENT}/config.sh"
-    fi
-}
-
-function config_check {
-    # Check the configuration environment variables.
-    if [[ -z "${OPENSTACK_CONFIG_PREFIX:+x}" ]]; then
-        die $LINENO "OPENSTACK_CONFIG_PREFIX must be set. This is the prefix to all playbooks. e.g p3"
-    fi
-    if [ -z ${OPENSTACK_CONFIG_OPENRC:+x} ]; then
-        die $LINENO "You must define OPENSTACK_CONFIG_OPENRC. This should contain the contents of"
-                    "OpenStack clouds.yaml file"
-    fi
-}
-
-function config_init {
-    config_defaults
-    config_set
-    config_check
-}
 
 function install_venv {
     # Install a virtualenv at $1. The rest of the arguments are passed
