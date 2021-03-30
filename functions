@@ -39,7 +39,7 @@ function config_check {
         die $LINENO "OPENSTACK_CONFIG_PREFIX must be set. This is the prefix to all playbooks. e.g p3"
     fi
     if [ -z ${OPENSTACK_CONFIG_OPENRC:+x} ]; then
-        die $LINENO "You must define OPENSTACK_CONFIG_OPENRC. This should contain the contents of"
+        die $LINENO "You must define OPENSTACK_CONFIG_OPENRC. This should contain the contents of" \
                     "OpenStack clouds.yaml file"
     fi
 }
