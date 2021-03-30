@@ -5,9 +5,9 @@ set -o pipefail
 
 # Library of functions for the kayobe development environment.
 
-PARENT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+FUNCTIONS_PARENT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export OPENSTACK_CONFIG_REPO_ROOT="$FUNCTIONS_PARENT/.."
-export OPENSTACK_CONFIG_AUTOMATION_CONFIG_PATH="${LIB_AUTOMATION_CONFIG_PATH:-$LIB_AUTOMATION_REPO_ROOT/.automation.conf}"
+export OPENSTACK_CONFIG_AUTOMATION_CONFIG_PATH="${OPENSTACK_CONFIG_AUTOMATION_CONFIG_PATH:-$OPENSTACK_CONFIG_REPO_ROOT/.automation.conf}"
 
 # Configuration
 
@@ -177,14 +177,14 @@ function run_openstack_config {
     #
     VAULT_HELPER=""
     if [ ! -z ${OPENSTACK_CONFIG_VAULT_PASSWORD:+x} ]; then
-        VAULT_HELPER="--vault-password-file $PARENT/utils/vault-helper.sh"
+        VAULT_HELPER="--vault-password-file $FUNCTIONS_PARENT/utils/vault-helper.sh"
     fi
     echo "$OPENSTACK_CONFIG_OPENRC" > /dev/shm/openrc
     source /dev/shm/openrc
     if [ "${OS_AUTH_TYPE:-x}" != "v3applicationcredential" ]; then
         die $LINENO "Password auth is not supported. Please use an application credential."
     fi
-    # Using -e "@$PARENT/extra-vars/auth-override.yml" means that we only support app creds, but as this
+    # Using -e "@$FUNCTIONS_PARENT/extra-vars/auth-override.yml" means that we only support app creds, but as this
     # is desirable, no effort has been made to support password auth.
-    "$REPO_ROOT/tools/um6p-config" "${@}" -- -e ansible_connection=local -e "@$PARENT/extra-vars/auth-override.yml" $VAULT_HELPER $OPENSTACK_CONFIG_ANSIBLE_EXTRA_ARGS
+    "$REPO_ROOT/tools/um6p-config" "${@}" -- -e ansible_connection=local -e "@$FUNCTIONS_PARENT/extra-vars/auth-override.yml" $VAULT_HELPER $OPENSTACK_CONFIG_ANSIBLE_EXTRA_ARGS
 }
