@@ -8,37 +8,37 @@ everything:
   stage: root
   when: manual
   script:
-    - automation/cd/apply.sh
+    - .automation/cd/apply.sh
 
 project:
   stage: root
   when: manual
   script:
-    - automation/cd/apply.sh -p ansible/um6p-project.yml
+    - .automation/cd/apply.sh -p ansible/um6p-project.yml
 
 images:
   stage: root
   when: manual
   script:
-    - automation/cd/apply.sh -p ansible/um6p-images.yml
+    - .automation/cd/apply.sh -p ansible/um6p-images.yml
 
 networks:
   stage: root
   when: manual
   script:
-    - automation/cd/apply.sh -p -p ansible/um6p-networks.yml
+    - .automation/cd/apply.sh -p -p ansible/um6p-networks.yml
 
 flavors:
   stage: root
   when: manual
   script:
-    - automation/cd/apply.sh -p ansible/um6p-flavors.yml
+    - .automation/cd/apply.sh -p ansible/um6p-flavors.yml
 
 host-aggregrates:
   stage: root
   when: manual
   script:
-    - automation/cd/apply.sh -p ansible/um6p-host-aggregates.yml
+    - .automation/cd/apply.sh -p ansible/um6p-host-aggregates.yml
 
 
 

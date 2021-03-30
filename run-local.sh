@@ -3,7 +3,7 @@
 set -eu
 set -o pipefail
 
-# Example: OPENSTACK_CONFIG_DOCKER_IMAGE=config-prebuild automation/run-local.sh automation/cd/apply.sh -p ansible/um6p-project.yml -- --env OPENSTACK_CONFIG_VAULT_PASSWORD=$(< ~/.kayobe-vault-pass) --env OPENSTACK_CONFIG_OPENRC="$(< ~/will/openrc-um6p-config)"
+# Example: OPENSTACK_CONFIG_DOCKER_IMAGE=config-prebuild .automation/run-local.sh .automation/cd/apply.sh -p ansible/um6p-project.yml -- --env OPENSTACK_CONFIG_VAULT_PASSWORD=$(< ~/.kayobe-vault-pass) --env OPENSTACK_CONFIG_OPENRC="$(< ~/will/openrc-um6p-config)"
 
 PARENT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$PARENT/.."
