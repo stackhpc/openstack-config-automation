@@ -15,7 +15,7 @@ function config_defaults {
     # Set default values for kayobe development configuration.
 
     export OPENSTACK_CONFIG_VENV_PATH="${OPENSTACK_CONFIG_VENV_PATH:-$HOME/venvs/openstack-config}"
-    export OPENSTACK_CONFIG_PIP_INSTALL_ARGS="${OPENSTACK_CONFIG_PIP_INSTALL_ARGS:--r $REPO_ROOT/requirements.txt}"
+    export OPENSTACK_CONFIG_PIP_INSTALL_ARGS="${OPENSTACK_CONFIG_PIP_INSTALL_ARGS:--r $OPENSTACK_CONFIG_REPO_ROOT/requirements.txt}"
     export OPENSTACK_CONFIG_ANSIBLE_EXTRA_ARGS="${OPENSTACK_CONFIG_ANSIBLE_EXTRA_ARGS:-}"
 
     # Log directory in case of errors
@@ -157,7 +157,7 @@ function environment_setup {
     source "${OPENSTACK_CONFIG_VENV_PATH}/bin/activate"
     set -u
 
-    ansible-galaxy install -p "$REPO_ROOT/ansible/roles" -r $REPO_ROOT/requirements.yml
+    ansible-galaxy install -p "$OPENSTACK_CONFIG_REPO_ROOT/ansible/roles" -r $REPO_ROOT/requirements.yml
 }
 
 function workarounds {
@@ -186,5 +186,5 @@ function run_openstack_config {
     fi
     # Using -e "@$FUNCTIONS_PARENT/extra-vars/auth-override.yml" means that we only support app creds, but as this
     # is desirable, no effort has been made to support password auth.
-    "$REPO_ROOT/tools/um6p-config" "${@}" -- -e ansible_connection=local -e "@$FUNCTIONS_PARENT/extra-vars/auth-override.yml" $VAULT_HELPER $OPENSTACK_CONFIG_ANSIBLE_EXTRA_ARGS
+    "$OPENSTACK_CONFIG_REPO_ROOT/tools/um6p-config" "${@}" -- -e ansible_connection=local -e "@$FUNCTIONS_PARENT/extra-vars/auth-override.yml" $VAULT_HELPER $OPENSTACK_CONFIG_ANSIBLE_EXTRA_ARGS
 }
