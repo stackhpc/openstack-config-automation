@@ -162,7 +162,7 @@ function environment_setup {
 }
 
 function workarounds {
-    ln -s /usr/bin/python3 /usr/bin/python
+    sudo_if_available ln -s /usr/bin/python3 /usr/bin/python
 }
 
 function openstack_config_init {
