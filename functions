@@ -17,6 +17,7 @@ function config_defaults {
     export OPENSTACK_CONFIG_VENV_PATH="${OPENSTACK_CONFIG_VENV_PATH:-$HOME/venvs/openstack-config}"
     export OPENSTACK_CONFIG_PIP_INSTALL_ARGS="${OPENSTACK_CONFIG_PIP_INSTALL_ARGS:--r $OPENSTACK_CONFIG_REPO_ROOT/requirements.txt}"
     export OPENSTACK_CONFIG_ANSIBLE_EXTRA_ARGS="${OPENSTACK_CONFIG_ANSIBLE_EXTRA_ARGS:-}"
+    export OPENSTACK_CONFIG_TOOL_APPLY="${OPENSTACK_CONFIG_TOOL_APPLY:$OPENSTACK_CONFIG_REPO_ROOT/tools/$OPENSTACK_CONFIG_PREFIX-config}"
 
     # Log directory in case of errors
     export LOGDIR=${LOGDIR:-}
@@ -186,5 +187,5 @@ function run_openstack_config {
     fi
     # Using -e "@$FUNCTIONS_PARENT/extra-vars/auth-override.yml" means that we only support app creds, but as this
     # is desirable, no effort has been made to support password auth.
-    "$OPENSTACK_CONFIG_REPO_ROOT/tools/um6p-config" "${@}" -- -e ansible_connection=local -e "@$FUNCTIONS_PARENT/extra-vars/auth-override.yml" $VAULT_HELPER $OPENSTACK_CONFIG_ANSIBLE_EXTRA_ARGS
+    "$OPENSTACK_CONFIG_TOOL_APPLY" "${@}" -- -e ansible_connection=local -e "@$FUNCTIONS_PARENT/extra-vars/auth-override.yml" $VAULT_HELPER $OPENSTACK_CONFIG_ANSIBLE_EXTRA_ARGS
 }
