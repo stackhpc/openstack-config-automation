@@ -4,7 +4,7 @@ MAINTAINER "Will Szumski" <will@stackhpc.com>
 ENV container docker
 
 RUN dnf update -y && \
-    dnf install -y git python3-pyyaml python3-virtualenv libffi-devel openssh-clients which && \
+    dnf install -y sudo git python3-pyyaml python3-virtualenv libffi-devel openssh-clients which && \
     dnf clean all
 
 ENV KAYOBE_USER=stack
