@@ -157,7 +157,7 @@ function environment_setup {
     source "${OPENSTACK_CONFIG_VENV_PATH}/bin/activate"
     set -u
 
-    ansible-galaxy install -p "$OPENSTACK_CONFIG_REPO_ROOT/ansible/roles" -r $REPO_ROOT/requirements.yml
+    ansible-galaxy install -p "$OPENSTACK_CONFIG_REPO_ROOT/ansible/roles" -r $OPENSTACK_CONFIG_REPO_ROOT/requirements.yml
 }
 
 function workarounds {
